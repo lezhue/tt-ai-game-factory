@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TT AI GAME Factory — AI-Powered Game Studio</title>
+  <meta name="description" content="TT AI GAME Factory is an indie game studio building next-generation mobile and social games powered by AI. Play our games on Facebook Instant Games and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --pink:    #ff3cac;
+      --purple:  #784ba0;
+      --blue:    #2b86c5;
+      --dark:    #0a0a12;
+      --card-bg: rgba(255,255,255,0.04);
+      --glow:    0 0 40px rgba(255,60,172,0.35);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--dark);
+      color: #e0e0ff;
+      overflow-x: hidden;
+    }
+
+    /* ── Canvas particles ── */
+    #particles-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── Navbar ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 7vw;
+      backdrop-filter: blur(18px);
+      background: rgba(10,10,18,0.6);
+      border-bottom: 1px solid rgba(255,60,172,0.1);
+    }
+
+    .logo {
+      font-size: 1.35rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--pink), #b967ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links { display: flex; gap: 2.2rem; list-style: none; }
+    .nav-links a {
+      color: #c0c0e0;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--pink); }
+
+    .nav-cta {
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: #fff !important;
+      padding: 9px 22px;
+      border-radius: 50px;
+      font-weight: 600 !important;
+      transition: transform 0.2s, box-shadow 0.2s !important;
+    }
+    .nav-cta:hover { transform: translateY(-2px); box-shadow: var(--glow) !important; color: #fff !important; }
+
+    /* ── Sections ── */
+    section { position: relative; z-index: 1; }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 7vw 80px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,60,172,0.12);
+      border: 1px solid rgba(255,60,172,0.3);
+      border-radius: 50px;
+      padding: 6px 18px;
+      font-size: 0.82rem;
+      color: var(--pink);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    .hero-badge span { width: 8px; height: 8px; border-radius: 50%; background: var(--pink); animation: blink 1.5s infinite; }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+    h1 {
+      font-size: clamp(2.8rem, 7vw, 6rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      background: linear-gradient(135deg, #fff 30%, var(--pink) 70%, #b967ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 24px;
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      color: #9090b8;
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: 48px;
+    }
+
+    .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: #fff;
+      padding: 15px 36px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 30px rgba(255,60,172,0.4);
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 40px rgba(255,60,172,0.6); }
+
+    .btn-ghost {
+      border: 1.5px solid rgba(255,60,172,0.4);
+      color: #e0e0ff;
+      padding: 14px 34px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s;
+    }
+    .btn-ghost:hover { border-color: var(--pink); color: var(--pink); background: rgba(255,60,172,0.06); }
+
+    /* ── Stats ── */
+    .stats-strip {
+      display: flex;
+      justify-content: center;
+      gap: 4vw;
+      margin-top: 80px;
+      flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-size: 2.2rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--pink), #b967ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .stat-label { font-size: 0.82rem; color: #6060a0; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+
+    /* ── Section titles ── */
+    .section-tag {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--pink);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+    .section-title span {
+      background: linear-gradient(90deg, var(--pink), #b967ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .section-sub { color: #7070a0; font-size: 1rem; line-height: 1.7; max-width: 500px; }
+
+    /* ── About ── */
+    #about {
+      padding: 110px 7vw;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .about-visual {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .orb {
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #ff3cac55, #784ba033, #2b86c515);
+      border: 1px solid rgba(255,60,172,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8rem;
+      animation: float 6s ease-in-out infinite;
+      box-shadow: 0 0 80px rgba(255,60,172,0.15), inset 0 0 60px rgba(120,75,160,0.1);
+    }
+
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-18px)} }
+
+    .feature-list { margin-top: 36px; display: flex; flex-direction: column; gap: 20px; }
+    .feature-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .feature-icon {
+      width: 42px; height: 42px;
+      border-radius: 12px;
+      background: rgba(255,60,172,0.1);
+      border: 1px solid rgba(255,60,172,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .feature-text h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+    .feature-text p { font-size: 0.85rem; color: #7070a0; line-height: 1.6; }
+
+    /* ── Games ── */
+    #games {
+      padding: 110px 7vw;
+      text-align: center;
+    }
+    #games .section-sub { margin: 0 auto 60px; }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+      margin-top: 60px;
+    }
+
+    .game-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 24px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+      text-align: left;
+    }
+    .game-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(255,60,172,0.2);
+      border-color: rgba(255,60,172,0.3);
+    }
+
+    .game-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-thumb-pink   { background: linear-gradient(135deg, #3d0030, #9c0060, #ff3cac55); }
+    .game-thumb-purple { background: linear-gradient(135deg, #1a0040, #4a0099, #784ba055); }
+    .game-thumb-blue   { background: linear-gradient(135deg, #001a40, #004999, #2b86c555); }
+
+    .game-info { padding: 22px 24px 26px; }
+    .game-status {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 50px;
+      margin-bottom: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .status-live { background: rgba(0,255,128,0.1); color: #00ff80; border: 1px solid rgba(0,255,128,0.2); }
+    .status-dev  { background: rgba(255,200,0,0.1); color: #ffc800; border: 1px solid rgba(255,200,0,0.2); }
+    .status-soon { background: rgba(150,150,255,0.1); color: #9696ff; border: 1px solid rgba(150,150,255,0.2); }
+
+    .game-info h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; }
+    .game-info p  { font-size: 0.85rem; color: #7070a0; line-height: 1.6; margin-bottom: 20px; }
+
+    .game-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--pink);
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .game-link:hover { gap: 10px; }
+
+    /* ── Services ── */
+    #services {
+      padding: 110px 7vw;
+      background: linear-gradient(180deg, transparent, rgba(120,75,160,0.06), transparent);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      margin-top: 60px;
+    }
+
+    .service-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
+      padding: 32px 28px;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--pink), var(--purple));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .service-card:hover::before { opacity: 1; }
+    .service-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(255,60,172,0.2);
+      background: rgba(255,60,172,0.04);
+    }
+
+    .service-icon { font-size: 2.2rem; margin-bottom: 18px; }
+    .service-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; }
+    .service-card p  { font-size: 0.85rem; color: #7070a0; line-height: 1.7; }
+
+    /* ── Tech ── */
+    #tech {
+      padding: 80px 7vw;
+      text-align: center;
+    }
+    .tech-label { color: #5050a0; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 32px; }
+    .tech-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+    }
+    .tech-pill {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 50px;
+      padding: 10px 22px;
+      font-size: 0.88rem;
+      color: #c0c0e0;
+      font-weight: 500;
+      transition: all 0.25s;
+    }
+    .tech-pill:hover {
+      background: rgba(255,60,172,0.08);
+      border-color: rgba(255,60,172,0.3);
+      color: #fff;
+    }
+
+    /* ── Contact ── */
+    #contact {
+      padding: 110px 7vw;
+      text-align: center;
+    }
+
+    .contact-card {
+      max-width: 640px;
+      margin: 60px auto 0;
+      background: var(--card-bg);
+      border: 1px solid rgba(255,60,172,0.15);
+      border-radius: 28px;
+      padding: 52px 48px;
+      box-shadow: 0 0 60px rgba(255,60,172,0.08);
+    }
+
+    .contact-card p { color: #7070a0; margin-bottom: 36px; line-height: 1.7; }
+
+    .form-group { margin-bottom: 18px; text-align: left; }
+    .form-group label { display: block; font-size: 0.82rem; color: #9090b8; margin-bottom: 7px; font-weight: 600; }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 13px 16px;
+      color: #e0e0ff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--pink); }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+
+    .form-submit {
+      width: 100%;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: #fff;
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: opacity 0.2s, transform 0.2s;
+      font-family: 'Outfit', sans-serif;
+    }
+    .form-submit:hover { opacity: 0.9; transform: translateY(-2px); }
+
+    /* ── Footer ── */
+    footer {
+      position: relative; z-index: 1;
+      padding: 48px 7vw 32px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-logo {
+      font-size: 1.15rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--pink), #b967ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    footer p { font-size: 0.82rem; color: #4545a0; }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { font-size: 0.82rem; color: #5555a0; text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--pink); }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      #about { grid-template-columns: 1fr; gap: 48px; }
+      .orb { width: 220px; height: 220px; font-size: 5rem; }
+      .contact-card { padding: 36px 24px; }
+      .nav-links { display: none; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="particles-canvas"></canvas>
+
+<!-- ── Nav ── -->
+<nav>
+  <div class="logo">🎮 TT AI GAME Factory</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#games">Games</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+  </ul>
+</nav>
+
+<!-- ── Hero ── -->
+<section id="hero">
+  <div class="hero-badge"><span></span> AI-Powered Game Studio</div>
+  <h1>We Build Games<br/>Powered by AI</h1>
+  <p class="hero-sub">TT AI GAME Factory crafts next-generation mobile &amp; social games using cutting-edge AI tools — faster, smarter, and more creative than ever.</p>
+  <div class="hero-btns">
+    <a href="#games" class="btn-primary">🎮 Play Our Games</a>
+    <a href="#contact" class="btn-ghost">Work With Us →</a>
+  </div>
+  <div class="stats-strip">
+    <div class="stat"><div class="stat-num">AI×</div><div class="stat-label">Powered Dev</div></div>
+    <div class="stat"><div class="stat-num">10×</div><div class="stat-label">Faster Builds</div></div>
+    <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Level Designs</div></div>
+    <div class="stat"><div class="stat-num">Multi</div><div class="stat-label">Platform Launch</div></div>
+  </div>
+</section>
+
+<!-- ── About ── -->
+<section id="about">
+  <div class="about-text">
+    <div class="section-tag">About Us</div>
+    <h2 class="section-title">Where <span>AI Meets</span><br/>Game Design</h2>
+    <p class="section-sub">We're an indie game studio at the frontier of AI-assisted game development. Our pipeline combines AI art generation, intelligent level design, and rapid iteration to ship polished games at record speed.</p>
+    <div class="feature-list">
+      <div class="feature-item">
+        <div class="feature-icon">🤖</div>
+        <div class="feature-text">
+          <h4>AI-Driven Development</h4>
+          <p>Every aspect of our workflow — art, level design, testing — is accelerated by AI tools.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">📱</div>
+        <div class="feature-text">
+          <h4>Cross-Platform Publishing</h4>
+          <p>We ship to Facebook Instant Games, WeChat Mini Games, Douyin, and more simultaneously.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-text">
+          <h4>Rapid Prototyping</h4>
+          <p>From concept to playable demo in days, not months. We move fast and iterate faster.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="about-visual">
+    <div class="orb">🎮</div>
+  </div>
+</section>
+
+<!-- ── Games ── -->
+<section id="games">
+  <div class="section-tag">Our Games</div>
+  <h2 class="section-title">Play Our <span>Latest Titles</span></h2>
+  <p class="section-sub">Casual, engaging, and beautifully crafted — our games are built to delight players everywhere.</p>
+
+  <div class="games-grid">
+    <div class="game-card">
+      <div class="game-thumb game-thumb-pink">💎</div>
+      <div class="game-info">
+        <span class="game-status status-live">● Live</span>
+        <h3>Pink Crush</h3>
+        <p>A dazzling match-3 puzzle adventure with boss battles, special gems, and dozens of handcrafted levels. Match, crush, conquer!</p>
+        <a href="#" class="game-link">Play on Facebook →</a>
+      </div>
+    </div>
+
+    <div class="game-card">
+      <div class="game-thumb game-thumb-purple">🔮</div>
+      <div class="game-info">
+        <span class="game-status status-dev">⚙ In Dev</span>
+        <h3>Mystic Merge</h3>
+        <p>Combine arcane artifacts and summon powerful spells in this relaxing merge-puzzle experience.</p>
+        <a href="#contact" class="game-link">Get Notified →</a>
+      </div>
+    </div>
+
+    <div class="game-card">
+      <div class="game-thumb game-thumb-blue">🚀</div>
+      <div class="game-info">
+        <span class="game-status status-soon">◎ Coming Soon</span>
+        <h3>Star Runner</h3>
+        <p>An endless runner through procedurally generated galaxies. AI creates a unique universe every run.</p>
+        <a href="#contact" class="game-link">Join Waitlist →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Services ── -->
+<section id="services">
+  <div style="text-align:center">
+    <div class="section-tag">What We Do</div>
+    <h2 class="section-title">Our <span>Capabilities</span></h2>
+    <p class="section-sub" style="margin:0 auto">Beyond building our own games, we partner with brands and studios to create extraordinary gaming experiences.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">🎨</div>
+      <h3>AI Art & Asset Generation</h3>
+      <p>Production-ready game art, icons, banners, and animations generated and refined with state-of-the-art AI pipelines.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🧩</div>
+      <h3>Game Design & Development</h3>
+      <p>Full-cycle game development using Cocos Creator, Unity, and HTML5 — from concept to published product.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📊</div>
+      <h3>Level & Content Design</h3>
+      <p>AI-assisted procedural level generation combined with hand-crafted designs for perfect balance and replayability.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🌍</div>
+      <h3>Multi-Platform Publishing</h3>
+      <p>We handle porting and publishing to Facebook, WeChat, Douyin, iOS, Android, and web platforms.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🔧</div>
+      <h3>Game Porting & Adaptation</h3>
+      <p>Adapt existing games to new platforms and social gaming environments with full SDK integration.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📈</div>
+      <h3>Analytics & Growth</h3>
+      <p>Data-driven retention mechanics, A/B testing frameworks, and monetization strategy for long-term growth.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Tech ── -->
+<section id="tech">
+  <p class="tech-label">Built With</p>
+  <div class="tech-pills">
+    <span class="tech-pill">🎮 Cocos Creator</span>
+    <span class="tech-pill">⚛️ TypeScript</span>
+    <span class="tech-pill">🤖 AI Image Gen</span>
+    <span class="tech-pill">📱 Facebook Instant Games</span>
+    <span class="tech-pill">💬 WeChat Mini Games</span>
+    <span class="tech-pill">🎵 Douyin Mini Games</span>
+    <span class="tech-pill">🌐 HTML5 / WebGL</span>
+    <span class="tech-pill">☁️ Cloud Assets</span>
+    <span class="tech-pill">🎨 Stable Diffusion</span>
+    <span class="tech-pill">✨ Gemini AI</span>
+  </div>
+</section>
+
+<!-- ── Contact ── -->
+<section id="contact">
+  <div class="section-tag">Get In Touch</div>
+  <h2 class="section-title">Let's <span>Build Together</span></h2>
+  <p class="section-sub" style="margin: 0 auto">Have a game idea? Want to partner? We'd love to hear from you.</p>
+
+  <div class="contact-card">
+    <p>Whether you're a brand looking to launch a social game, or a developer wanting to collaborate — drop us a message.</p>
+    <form onsubmit="handleSubmit(event)">
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" placeholder="Jane Smith" required />
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="hello@example.com" required />
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea placeholder="Tell us about your project..."></textarea>
+      </div>
+      <button type="submit" class="form-submit">Send Message 🚀</button>
+    </form>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="footer-logo">🎮 TT AI GAME Factory</div>
+  <p>© 2025 TT AI GAME Factory. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="mailto:contact@ttaigamefactory.com">Contact</a>
+  </div>
+</footer>
+
+<script>
+  /* ── Particle system ── */
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function Particle() {
+    this.reset = function() {
+      this.x  = Math.random() * W;
+      this.y  = Math.random() * H;
+      this.r  = Math.random() * 1.8 + 0.3;
+      this.vx = (Math.random() - 0.5) * 0.3;
+      this.vy = (Math.random() - 0.5) * 0.3;
+      this.alpha = Math.random() * 0.5 + 0.1;
+      const hues = [320, 280, 240, 200];
+      this.hue = hues[Math.floor(Math.random() * hues.length)];
+    };
+    this.reset();
+  }
+
+  for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0 || p.x > W || p.y < 0 || p.y > H) p.reset();
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${p.hue}, 80%, 70%, ${p.alpha})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  /* ── Scroll reveal ── */
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.game-card, .service-card, .feature-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+
+  /* ── Form handler ── */
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.form-submit');
+    btn.textContent = '✅ Message Sent!';
+    btn.style.background = 'linear-gradient(135deg, #00c875, #00a060)';
+    setTimeout(() => {
+      btn.textContent = 'Send Message 🚀';
+      btn.style.background = '';
+      e.target.reset();
+    }, 3000);
+  }
+</script>
+</body>
+</html>
