@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pink Crush — Match-3 Puzzle Adventure | TT AI GAME Factory</title>
+    <meta name="description"
+        content="Play Pink Crush — the dazzling match-3 puzzle game with boss battles, special gems, and dozens of handcrafted levels. Free to play on Facebook Instant Games!" />
+    <meta property="og:title" content="Pink Crush — Match-3 Puzzle Adventure" />
+    <meta property="og:description" content="Match, Crush, Conquer — One Sweet Move at a Time!" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://lezhue.github.io/tt-ai-game-factory/pink-crush.html" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --pink: #ff3cac;
+            --purple: #784ba0;
+            --dark: #0a0a12;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--dark);
+            color: #e0e0ff;
+            overflow-x: hidden;
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 6vw;
+            backdrop-filter: blur(18px);
+            background: rgba(10, 10, 18, 0.7);
+            border-bottom: 1px solid rgba(255, 60, 172, 0.1);
+        }
+
+        .logo {
+            font-size: 1rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--pink), #b967ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .nav-play {
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            color: #fff;
+            padding: 9px 22px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .nav-play:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(255, 60, 172, 0.5);
+        }
+
+        /* Hero */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 100px 6vw 60px;
+            background: radial-gradient(ellipse at 50% 0%, rgba(255, 60, 172, 0.12) 0%, transparent 60%);
+        }
+
+        .gem-icon {
+            font-size: 6rem;
+            animation: float 4s ease-in-out infinite;
+            margin-bottom: 24px;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-16px)
+            }
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 60, 172, 0.1);
+            border: 1px solid rgba(255, 60, 172, 0.3);
+            border-radius: 50px;
+            padding: 5px 16px;
+            font-size: 0.78rem;
+            color: var(--pink);
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--pink);
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: 0.2
+            }
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 6.5rem);
+            font-weight: 900;
+            line-height: 1.0;
+            letter-spacing: -3px;
+            background: linear-gradient(135deg, #fff 20%, var(--pink) 60%, #b967ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .tagline {
+            font-size: clamp(1rem, 2.5vw, 1.4rem);
+            color: #7070a0;
+            margin-bottom: 12px;
+            font-style: italic;
+        }
+
+        .hero-desc {
+            font-size: 1rem;
+            color: #6868a0;
+            max-width: 520px;
+            line-height: 1.7;
+            margin-bottom: 44px;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 60px;
+        }
+
+        .btn-main {
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            color: #fff;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            text-decoration: none;
+            box-shadow: 0 6px 32px rgba(255, 60, 172, 0.45);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-main:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 48px rgba(255, 60, 172, 0.65);
+        }
+
+        .btn-ghost {
+            border: 1.5px solid rgba(255, 60, 172, 0.35);
+            color: #d0d0f0;
+            padding: 15px 34px;
+            border-radius: 50px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.25s;
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--pink);
+            color: var(--pink);
+        }
+
+        /* Platforms */
+        .platforms {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .platform-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 8px 18px;
+            font-size: 0.82rem;
+            color: #8080b0;
+        }
+
+        /* Features */
+        #features {
+            padding: 100px 6vw;
+        }
+
+        #features h2 {
+            text-align: center;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 60px;
+        }
+
+        #features h2 span {
+            background: linear-gradient(90deg, var(--pink), #b967ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .feat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 20px;
+            padding: 28px 24px;
+            transition: all 0.3s;
+        }
+
+        .feat-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(255, 60, 172, 0.25);
+            background: rgba(255, 60, 172, 0.04);
+        }
+
+        .feat-icon {
+            font-size: 2rem;
+            margin-bottom: 14px;
+        }
+
+        .feat-card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .feat-card p {
+            font-size: 0.85rem;
+            color: #6868a0;
+            line-height: 1.7;
+        }
+
+        /* Screenshots / visual */
+        #showcase {
+            padding: 80px 6vw;
+            text-align: center;
+        }
+
+        #showcase h2 {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 48px;
+        }
+
+        #showcase h2 span {
+            background: linear-gradient(90deg, var(--pink), #b967ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gem-showcase {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .gem-tile {
+            width: 120px;
+            height: 120px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            animation: float 4s ease-in-out infinite;
+            transition: transform 0.3s;
+        }
+
+        .gem-tile:hover {
+            transform: scale(1.12);
+        }
+
+        .gem-tile:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .gem-tile:nth-child(3) {
+            animation-delay: 0.8s;
+        }
+
+        .gem-tile:nth-child(4) {
+            animation-delay: 1.2s;
+        }
+
+        .gem-tile:nth-child(5) {
+            animation-delay: 1.6s;
+        }
+
+        .g1 {
+            background: linear-gradient(135deg, #3d001880, #ff3cac30);
+        }
+
+        .g2 {
+            background: linear-gradient(135deg, #1a004080, #784ba030);
+        }
+
+        .g3 {
+            background: linear-gradient(135deg, #00204080, #2b86c530);
+        }
+
+        .g4 {
+            background: linear-gradient(135deg, #1a260080, #6a9f0030);
+        }
+
+        .g5 {
+            background: linear-gradient(135deg, #402a0080, #c87f0030);
+        }
+
+        /* CTA bottom */
+        #cta-bottom {
+            padding: 100px 6vw;
+            text-align: center;
+            background: radial-gradient(ellipse at 50% 100%, rgba(120, 75, 160, 0.12) 0%, transparent 60%);
+        }
+
+        #cta-bottom h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin-bottom: 16px;
+        }
+
+        #cta-bottom h2 span {
+            background: linear-gradient(90deg, var(--pink), #b967ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #cta-bottom p {
+            color: #6868a0;
+            margin-bottom: 40px;
+            font-size: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 32px 6vw;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        footer p {
+            font-size: 0.8rem;
+            color: #4040a0;
+        }
+
+        .foot-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .foot-links a {
+            font-size: 0.8rem;
+            color: #4040a0;
+            text-decoration: none;
+        }
+
+        .foot-links a:hover {
+            color: var(--pink);
+        }
+
+        @media(max-width:600px) {
+            h1 {
+                letter-spacing: -1px;
+            }
+
+            .gem-tile {
+                width: 80px;
+                height: 80px;
+                font-size: 2.2rem;
+                border-radius: 16px;
+            }
+
+            footer {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="index.html" class="logo">🎮 TT AI GAME Factory</a>
+        <a href="#play" class="nav-play">Play Free →</a>
+    </nav>
+
+    <!-- Hero -->
+    <section id="hero">
+        <div class="gem-icon">💎</div>
+        <div class="badge"><span class="dot"></span> Now Available</div>
+        <h1>Pink Crush</h1>
+        <p class="tagline">"Match, Crush, Conquer — One Sweet Move at a Time!"</p>
+        <p class="hero-desc">A dazzling match-3 puzzle adventure packed with boss battles, explosive special gems,
+            tricky obstacles, and dozens of handcrafted levels. Free to play!</p>
+        <div class="cta-group" id="play">
+            <a href="https://www.facebook.com/instantgames/" class="btn-main">🎮 Play on Facebook</a>
+            <a href="#features" class="btn-ghost">Learn More ↓</a>
+        </div>
+        <div class="platforms">
+            <span class="platform-badge">📱 Facebook Instant Games</span>
+            <span class="platform-badge">🎵 TikTok Mini Games</span>
+            <span class="platform-badge">💬 WeChat Mini Games</span>
+            <span class="platform-badge">🌐 Web</span>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features">
+        <h2>What Makes It <span>Special</span></h2>
+        <div class="features-grid">
+            <div class="feat-card">
+                <div class="feat-icon">💥</div>
+                <h3>Boss Battles</h3>
+                <p>Defeat powerful bosses by chaining combos and dealing damage with every match you make.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon">⚡</div>
+                <h3>Special Power Gems</h3>
+                <p>Create explosive chain reactions — line blasters, bombs, rainbow gems — and obliterate the board.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon">🧊</div>
+                <h3>Dynamic Obstacles</h3>
+                <p>Break through Ice, Chains, Fog, and spreading Poison — each level brings new challenges.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon">⭐</div>
+                <h3>3-Star Rating</h3>
+                <p>Score big to earn all 3 stars. Master every level and collect maximum rewards.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon">⏱️</div>
+                <h3>Timed Challenges</h3>
+                <p>Race against the clock in special timed levels for an added rush of adrenaline.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon">💡</div>
+                <h3>Smart Hints</h3>
+                <p>Stuck? The built-in hint system highlights your best move to keep the game flowing.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gem Showcase -->
+    <section id="showcase">
+        <h2>Meet the <span>Gems</span></h2>
+        <div class="gem-showcase">
+            <div class="gem-tile g1">💎</div>
+            <div class="gem-tile g2">🔮</div>
+            <div class="gem-tile g3">💠</div>
+            <div class="gem-tile g4">💚</div>
+            <div class="gem-tile g5">🟡</div>
+        </div>
+    </section>
+
+    <!-- CTA Bottom -->
+    <section id="cta-bottom">
+        <h2>Ready to <span>Crush</span>?</h2>
+        <p>It's free to play — jump in and start matching now!</p>
+        <div class="cta-group">
+            <a href="https://www.facebook.com/instantgames/" class="btn-main">🎮 Play for Free</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 TT AI GAME Factory · Pink Crush</p>
+        <div class="foot-links">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="index.html">Studio</a>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll reveal
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; } });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.feat-card,.gem-tile').forEach(el => {
+            el.style.opacity = '0'; el.style.transform = 'translateY(24px)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+
+</html>
