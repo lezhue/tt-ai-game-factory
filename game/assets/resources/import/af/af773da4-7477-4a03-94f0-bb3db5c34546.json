@@ -1,0 +1,1 @@
+[1,0,0,[["cc.JsonAsset",["_name","json"],1]],[[0,0,1,3]],[[0,"level_1",{"id":1,"name":"深海消消乐","chapter":1,"difficulty":"easy","rows":9,"cols":7,"gemTypes":4,"maxMoves":30,"goals":[{"type":"score","target":1000,"current":0}],"starThresholds":{"oneStar":1000,"twoStar":2000,"threeStar":3500},"rewards":{"coins":50,"exp":10}}]],0,0,[],[],[]]
